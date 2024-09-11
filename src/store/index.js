@@ -6,8 +6,14 @@ export default createStore({
     cart: []
   },
   getters: {
+    getCart(state) {
+      return state.cart
+    },
   },
   mutations: {
+    addToCart(state,product) {
+      state.cart.push(product)
+    },
   },
   actions: {
   },

@@ -8,7 +8,7 @@
 			<p>{{ product.name }}</p>
 		</div>
 		<div class='productCost'>
-			<p style='font-size: 24px; margin:0;'> {{ product.cost }} $</p>
+			<p style='font-size: 24px; margin:0;'> {{ totalPrice }} $</p>
 			<div class='counter'>
 				<div class='decreaseCount' @click='changeCount($event)'>&lt;</div>
 				<p style='font-size: 24px;margin: 0 5px 0 5px;'>{{ count }}</p>
@@ -37,17 +37,32 @@ export default {
           name: "Simple tovar",
           star: "4.0",
           allStar: "40",
-          cost: "3000",
+          cost: 3000,
           img: "https://i.ytimg.com/vi/tMEeXpPzOyw/maxresdefault.jpg",
 					description: "Большое описание товара описание товара описание товара описание товара описание товара описание товара описание товара описание товара описание товара описание товара описание товара описание товара описание товара описание товара описание товара описание товара описание товара "
-      }
+      },
+			totalPrice: 1
 		}
 	},
 	methods: {
 		changeCount(event) {
-			if (event.target.className == "decreaseCount") (this.count != 1) ? this.count-- : this.count = 1
-			else this.count++
+			if (event.target.className == "decreaseCount") {
+				if (this.count != 1) {
+					this.count--
+					this.totalPrice -= this.product.cost
+				}
+			}
+			else {
+				this.count++
+				this.totalPrice += this.product.cost
+			}
+		},
+		getCost() {
+			this.totalPrice = this.product.cost
 		}
+	},
+	created() {
+		this.getCost()
 	}
 }
 </script>
@@ -70,9 +85,13 @@ export default {
 	padding: 20px;
 	height: fit-content;
 }
+.productDescription {
+	grid-column: 1/3;
+}
 .counter {
 	display: flex;
 	align-items: center;
+	margin-bottom: 15px;
 }
 .decreaseCount, .increaseCount {
 	background-color:#105f3c;
@@ -80,6 +99,10 @@ export default {
 	border-radius: 15px;
 	cursor: pointer;
 	user-select: none;
+}
+.decreaseCount:hover, .increaseCount:hover {
+	filter:drop-shadow(0 0 12px #105f3c);
+	
 }
 .orderButton {
   background-color:#105f3c;
